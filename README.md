@@ -5,24 +5,17 @@ ReadMe describes in details about the run_analysis.R script.
 
 1. The libraries required
 
-The following libraries are required for this project:
-•reshape2
-•plyr
+The following libraries are required for this project: reshape2, plyr
 
 2. Downloading and unzipping the data set
 
-For downloading the data set the download.file() function has been used. 2 parameters have been passed:
-•the file url
-•the location where the file will be downloaded
+For downloading the data set the download.file() function has been used. 2 parameters have been passed: the file url, the location where the file will be downloaded
 
 After the data set has been downloaded in the current directory, it has been unzipped using the unzip() function by passing the data set zip file name as the only parameter.
 
 3. Merging the training and test data set
 
-Approach:
-•merge subject, activity and features of training data set in one data set.
-•merge subject, activity and features of test data set in another data set.
-•merge tranining and test data set in one single data set.
+Approach: merge subject, activity and features of training data set in one data set, merge subject, activity and features of test data set in another data set, merge tranining and test data set in one single data set.
 
 Code:
 features<-read.table("UCI HAR Dataset/features.txt")
@@ -38,19 +31,14 @@ mergedData<-rbind(traindata,testdata)
 
 Details:
 
-The training data set is located in the directory "UCI HAR Dataset/train" and the test data set is located in the directory "UCI HAR Dataset/test". Each data set contains 3 files, "subject", "X" and "Y".
-•subject - list of subject id, who performed the experiment
-•X - list of features
-•Y - list of activities
+The training data set is located in the directory "UCI HAR Dataset/train" and the test data set is located in the directory "UCI HAR Dataset/test". Each data set contains 3 files, "subject" (list of subject id, who performed the experiment), "X" (list of features) and "Y" (list of activities).
 
 First, the "subject", "X" and "Y" of the training data set was merged into one data set called traindata and then the "subject", "X" and "Y" of the test data set was merged into another single data set called testdata. Finally the traindata and testdata were merged to form the final single data set called mergedData.
 
 The list of feature names are located in "UCI HAR Dataset/features.txt". It is loaded using read.table() and assigned to a data frame called features.
 features <- read.table("UCI HAR Dataset/features.txt")
 
-A custom function called cleandata() has been created to modularize the repetative tasks of merging the data set. The function takes 2 parameters:
-•base - the location of the base directory of the data set
-•type - the type of data set, either "train" or "test"
+A custom function called cleandata() has been created to modularize the repetative tasks of merging the data set. The function takes 2 parameters: base - the location of the base directory of the data set, type - the type of data set, either "train" or "test"
 
 The following code illustrates the prepareDataSet() function:
 cleandata<-function(base,type) {
@@ -85,9 +73,7 @@ mergedData<-rbind(traindata,testdata)
 
 4. Extracting columns that correspond to mean and std
 
-Approach:
-•using regex to identify the mean and std columns in the merged dataframe.
-•subset the merged dataframe to extract the mean and std columns.
+Approach: using regex to identify the mean and std columns in the merged dataframe, then subset the merged dataframe to extract the mean and std columns.
 
 Code:
 meanSD<-grepl("mean\\(\\)|std\\(\\)",features[,2])
@@ -112,10 +98,7 @@ mergedData2<-mergedData[,cols==TRUE]
 
 5. Adding descriptive activity names to the activity column
 
-Approach:
-•read the activity labels.
-•create a factor variable of activity labels.
-•assign the factor variable to the activity column of the merged dataframe.
+Approach: read the activity labels, create a factor variable of activity labels, assign the factor variable to the activity column of the merged dataframe.
 
 Code:
 descript<-read.table("UCI HAR Dataset/activity_labels.txt",col.names=c("ID","Label"))
@@ -123,17 +106,12 @@ mergedData2[,2]<-factor(mergedData2[,2],descript$ID,descript$Label)
 
 Details:
 
-The activity names are located in the file "UCI HAR Dataset/activity_labels.txt". These activity names are loaded into a data frame called labels using the read.table() function. 2 parameters have been passed:
-•the file location.
-•names of the columns, which are Id and Label. The columns names are given to uniquely identify each columns.
+The activity names are located in the file "UCI HAR Dataset/activity_labels.txt". These activity names are loaded into a data frame called labels using the read.table() function. 2 parameters have been passed: the file location and names of the columns, which are Id and Label.
 
 The following code shows how the activity names are loaded:
 descript<-read.table("UCI HAR Dataset/activity_labels.txt",col.names=c("ID","Label"))
 
-The activity column in the merged data set is now factorized. This has been done by creating a factor variable using factor(). 3 parameters have been passed:
-•the activity column of the merged data set.
-•the id from the descript data frame. This id will be matched with the id in the activity column.
-•the label from the descript data frame. This label will replace the matched id.
+The activity column in the merged data set is now factorized. This has been done by creating a factor variable using factor(). 3 parameters have been passed: the activity column of the merged data set, the id from the descript data frame. This id will be matched with the id in the activity column, the label from the descript data frame. This label will replace the matched id.
 
 The following code shows how the factorization has been done:
 factor(mergedData2[,2],descript$ID,descript$Label)
@@ -143,12 +121,7 @@ mergedData2[,2]<-factor(mergedData2[,2],descript$ID,descript$Label)
 
 6. Adding descriptive names for all the columns/variables
 
-Approach:
-•extract all the columns names of the merged dataframe.
-•iterate through the columns names.
-•using regex to seperate the variables in the names.
-•create a vector of new column names.
-•update the merged dataframe with the new column names.
+Approach: extract all the columns names of the merged dataframe, iterate through the columns names, using regex to seperate the variables in the names, create a vector of new column names, update the merged dataframe with the new column names.
 
 Code:
 colNames<-colnames(mergedData2)[3:ncol(mergedData2)]
@@ -215,10 +188,7 @@ colnames(mergedData2)<-newColNames
 
 7. Ceating the tidy data set with the average of each variable for each activity and each subject
 
-Approach:
-•making the merged data long.
-•calculating the average of each variable for each activity and each subject.
-•creating the final tidy data set by dividing the single measurement variable into seperate individual variables.
+Approach: making the merged data long, calculating the average of each variable for each activity and each subject, creating the final tidy data set by dividing the single measurement variable into seperate individual variables.
 
 Code:
 subdata<-melt(mergedData2,id.vars=c("subject_id","activity"),
@@ -278,10 +248,7 @@ tidydata<-rbind.fill(list)
 
 8. Saving the tidy data set
 
-The tidy data set has been saved using the write.table() function. 3 parameters have been passed:
-•the data frame containing the tidy data.
-•the output file name.
-•row.names = FALSE, this tells write.table() not to write the row names in the output file.
+The tidy data set has been saved using the write.table() function. 3 parameters have been passed: the data frame containing the tidy data, the output file name, row.names = FALSE, this tells write.table() not to write the row names in the output file.
 
 The following code shows how the tidy data has been saved:
 write.table(tidydata, "tidydata.txt", row.names = FALSE)
