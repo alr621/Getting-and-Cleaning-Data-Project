@@ -1,0 +1,63 @@
+CodeBook - Human Activity Recognition Using SmartPhones
+
+subject_id
+
+Integer id of the subject/person who performed the experiment.
+
+activity
+
+The type of activity that the subject/person performed wearing a smartphone on their waist:
+•WALKING
+•WALKING_UPSTAIRS
+•WALKING_DOWNSTAIRS
+•SITTING
+•STANDING
+•LAYING
+
+domain
+
+The type of domain that the signal belonged to:
+•Time
+•Frequency
+
+acceleration
+
+The type of acceleration signal that was captured using low pass Butterworth filter:
+•Body
+•Gravity
+
+device
+
+The type of sensor that was used to capture the signals:
+•Accelerometer
+•Gyroscope
+
+jerk
+
+Whether the body linear acceleration and angular velocity were derived to obtain Jerk signals:
+•Yes (jerk signal was derived)
+•No (jerk signal was not derived)
+
+magnitude
+
+Whether the magnitude of the signals were calculated using the Euclidean norm:
+•Yes (magnitude was calcuated)
+•No (magnitude was not calcuated)
+
+statistic
+
+The set of variables that were estimated from the signals:
+•Mean
+•Standard Deviation
+
+axis
+
+The dimension of the signal:
+•X
+•Y
+•Z
+
+average
+
+The average of each variable for each activity and each subject. Unit: Hz.
+Enter file contents here
